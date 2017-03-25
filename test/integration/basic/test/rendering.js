@@ -28,14 +28,6 @@ export default function ({ app }, suiteName, render) {
       expect(html.includes('I can haz meta tags')).toBeTruthy()
     })
 
-    test('css helper renders styles', async () => {
-      const $ = await get$('/css')
-      const redBox = $('#red-box')
-
-      expect(redBox.text()).toBe('This is red')
-      expect(redBox.attr('class')).toMatch(/^css-/)
-    })
-
     test('renders styled jsx', async () => {
       const $ = await get$('/styled-jsx')
       const styleId = $('#blue-box').attr('data-jsx')
@@ -59,6 +51,17 @@ export default function ({ app }, suiteName, render) {
       const $ = await get$('/empty-get-initial-props')
       const expectedErrorMessage = '"EmptyInitialPropsPage.getInitialProps()" should resolve to an object. But found "null" instead.'
       expect($('pre').text().includes(expectedErrorMessage)).toBeTruthy()
+    })
+
+    test('allows to import .json files', async () => {
+      const html = await render('/json')
+      expect(html.includes('Zeit')).toBeTruthy()
+    })
+
+    test('default export is not a React Component', async () => {
+      const $ = await get$('/no-default-export')
+      const pre = $('pre')
+      expect(pre.text()).toMatch(/The default export is not a React Component/)
     })
 
     test('error', async () => {

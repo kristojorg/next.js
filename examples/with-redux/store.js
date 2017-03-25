@@ -12,13 +12,6 @@ export const startClock = () => dispatch => {
   return setInterval(() => dispatch({ type: 'TICK', light: true, ts: Date.now() }), 800)
 }
 
-export const initStore = (reducer, initialState, isServer) => {
-  if (isServer && typeof window === 'undefined') {
-    return createStore(reducer, initialState, applyMiddleware(thunkMiddleware))
-  } else {
-    if (!window.store) {
-      window.store = createStore(reducer, initialState, applyMiddleware(thunkMiddleware))
-    }
-    return window.store
-  }
+export const initStore = (initialState) => {
+  return createStore(reducer, initialState, applyMiddleware(thunkMiddleware))
 }
